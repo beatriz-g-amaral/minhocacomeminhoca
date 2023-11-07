@@ -9,6 +9,7 @@ public:
     void Setup();
     void Input();
     void Logic();
+    void ClearScreen();
     bool IsGameOver();
 
 private:
