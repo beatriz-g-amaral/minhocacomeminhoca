@@ -1,7 +1,9 @@
-#include "minhoca.h"
+#include "minhoca.hpp"
 #include <iostream>
-#include <conio.h>
-#include <windows.h>
+#include <thread>
+#include <cstdlib>
+
+using namespace std;
 
 JogoMinhoca::JogoMinhoca(int w, int h) : width(w), height(h) {
     gameover = false;
@@ -21,64 +23,70 @@ JogoMinhoca::~JogoMinhoca() {
     delete[] tailY;
 }
 
+void JogoMinhoca::ClearScreen() {
+    cout << "\033[2J\033[1;1H"; 
+}
+
 void JogoMinhoca::Setup() {
-    system("cls");
+    ClearScreen();
     for (int i = 0; i < width + 2; i++)
-        std::cout << "#";
-    std::cout << std::endl;
+       cout << "#";
+   cout <<endl;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             if (j == 0)
-                std::cout << "#";
+               cout << "#";
             if (i == y && j == x)
-                std::cout << "O";
+               cout << "O";
             else if (i == fruitY && j == fruitX)
-                std::cout << "*";
+               cout << "*";
             else {
                 bool print = false;
                 for (int k = 0; k < nTail; k++) {
                     if (tailX[k] == j && tailY[k] == i) {
-                        std::cout << "o";
+                       cout << "o";
                         print = true;
                     }
                 }
                 if (!print)
-                    std::cout << " ";
+                   cout << " ";
             }
 
             if (j == width - 1)
-                std::cout << "#";
+               cout << "#";
         }
-        std::cout << std::endl;
+       cout <<endl;
     }
 
     for (int i = 0; i < width + 2; i++)
-        std::cout << "#";
-    std::cout << std::endl;
-    std::cout << "Score:" << score << std::endl;
+       cout << "#";
+   cout <<endl;
+   cout << "Score:" << score <<endl;
 }
 
 void JogoMinhoca::Input() {
-    if (_kbhit()) {
-        switch (_getch()) {
-        case 'a':
-            dir = LEFT;
-            break;
-        case 'd':
-            dir = RIGHT;
-            break;
-        case 'w':
-            dir = UP;
-            break;
-        case 's':
-            dir = DOWN;
-            break;
-        case 'x':
-            gameover = true;
-            break;
-        }
-    }
+  if (cin) {
+      char key;
+      cin >> key;
+      switch (key) {
+          case 'a':
+              dir = LEFT;
+              break;
+          case 'd':
+              dir = RIGHT;
+              break;
+          case 'w':
+              dir = UP;
+              break;
+          case 's':
+              dir = DOWN;
+              break;
+          case 'x':
+              gameover = true;
+              break;
+      }
+  }
 }
 
 void JogoMinhoca::Logic() {
